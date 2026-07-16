@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fintech-banking-api
+  namespace: staging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fintech-banking-api
+  template:
+    metadata:
+      labels:
+        app: fintech-banking-api
+    spec:
+      containers:
+        - name: fintech-banking-api
+          image: 856480643635.dkr.ecr.us-east-1.amazonaws.com/fintech-banking-api:latest
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - secretRef:
+                name: fintech-db-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fintech-banking-api-service
+  namespace: staging
+spec:
+  type: ClusterIP
+  selector:
+    app: fintech-banking-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000

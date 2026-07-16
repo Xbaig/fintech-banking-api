@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fintech-banking-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: fintech-banking-api
+  template:
+    metadata:
+      labels:
+        app: fintech-banking-api
+    spec:
+      containers:
+        - name: fintech-banking-api
+          image: 856480643635.dkr.ecr.us-east-1.amazonaws.com/fintech-banking-api:latest
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - secretRef:
+                name: fintech-db-secret
